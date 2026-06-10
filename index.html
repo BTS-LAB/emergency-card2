@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEDISCAN QR</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:linear-gradient(135deg,#0b132b,#1c2541);color:white}
+.container{max-width:900px;margin:auto;padding:20px}
+.card{background:#ffffff10;padding:20px;border-radius:15px;margin-top:20px}
+input,textarea,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:none}
+button{padding:12px 18px;border:none;border-radius:10px;cursor:pointer;margin:5px}
+.primary{background:#00b4d8;color:white}
+.red{background:#c1121f;color:white}
+#emergency{display:none;background:linear-gradient(135deg,#000,#7f0000);padding:20px;border-radius:15px;margin-top:20px}
+#qrImg{max-width:220px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>🚑 MEDISCAN QR</h1>
+
+<div class="card">
+<h2>Create Emergency Profile</h2>
+<input id="name" placeholder="Full Name">
+<input id="age" placeholder="Age">
+<input id="blood" placeholder="Blood Group">
+<input id="allergy" placeholder="Allergies">
+<input id="condition" placeholder="Medical Conditions">
+<input id="meds" placeholder="Medications">
+<input id="contactName" placeholder="Emergency Contact Name">
+<input id="contact" placeholder="Emergency Contact Number">
+<input id="address" placeholder="Address / Area">
+
+<button class="primary" onclick="generate()">MAKE QR CODE</button>
+
+<div id="qrArea" style="display:none">
+<h3>Your QR Code</h3>
+<img id="qrImg">
+</div>
+</div>
+
+<div id="emergency">
+<h2>🚨 Emergency Medical Profile</h2>
+
+<label>Select Language</label>
+<select id="lang" onchange="updateLanguage()">
+<option value="en">English</option>
+<option value="hi">Hindi</option>
+<option value="mr">Marathi</option>
+<option value="gu">Gujarati</option>
+<option value="ta">Tamil</option>
+<option value="bn">Bengali</option>
+</select>
+
+<p><b id="l_name">Name</b>: <span id="v_name"></span></p>
+<p><b id="l_age">Age</b>: <span id="v_age"></span></p>
+<p><b id="l_blood">Blood Group</b>: <span id="v_blood"></span></p>
+<p><b id="l_allergy">Allergies</b>: <span id="v_allergy"></span></p>
+<p><b id="l_condition">Medical Conditions</b>: <span id="v_condition"></span></p>
+<p><b id="l_contact">Emergency Contact</b>: <span id="v_contact"></span></p>
+<p><b id="l_address">Address</b>: <span id="v_address"></span></p>
+
+<button class="red" onclick="window.location.href='tel:108'">🚑 Ambulance (108)</button>
+<button class="red" onclick="callContact()">📞 Emergency Contact</button>
+<button class="red" onclick="findHospitals()">🏥 Nearby Hospitals</button>
+</div>
+</div>
+
+<script>
+let contactNumber='';
+
+const labels={
+en:{name:"Name",age:"Age",blood:"Blood Group",allergy:"Allergies",condition:"Medical Conditions",contact:"Emergency Contact",address:"Address"},
+hi:{name:"नाम",age:"आयु",blood:"रक्त समूह",allergy:"एलर्जी",condition:"चिकित्सीय स्थिति",contact:"आपातकालीन संपर्क",address:"पता"},
+mr:{name:"नाव",age:"वय",blood:"रक्तगट",allergy:"अॅलर्जी",condition:"वैद्यकीय स्थिती",contact:"आपत्कालीन संपर्क",address:"पत्ता"},
+gu:{name:"નામ",age:"ઉંમર",blood:"બ્લડ ગ્રુપ",allergy:"એલર્જી",condition:"તબીબી સ્થિતિ",contact:"ઇમરજન્સી સંપર્ક",address:"સરનામું"},
+ta:{name:"பெயர்",age:"வயது",blood:"இரத்த வகை",allergy:"ஒவ்வாமை",condition:"மருத்துவ நிலை",contact:"அவசர தொடர்பு",address:"முகவரி"},
+bn:{name:"নাম",age:"বয়স",blood:"রক্তের গ্রুপ",allergy:"অ্যালার্জি",condition:"চিকিৎসা অবস্থা",contact:"জরুরি যোগাযোগ",address:"ঠিকানা"}
+};
+
+function generate(){
+const n=document.getElementById('name').value;
+const a=document.getElementById('age').value;
+const b=document.getElementById('blood').value;
+const al=document.getElementById('allergy').value;
+const c=document.getElementById('condition').value;
+const cn=document.getElementById('contactName').value;
+const num=document.getElementById('contact').value;
+const ad=document.getElementById('address').value;
+
+contactNumber=num;
+
+v_name.textContent=n;
+v_age.textContent=a;
+v_blood.textContent=b;
+v_allergy.textContent=al;
+v_condition.textContent=c;
+v_contact.textContent=cn+" ("+num+")";
+v_address.textContent=ad;
+
+document.getElementById('emergency').style.display='block';
+
+const data=`MEDISCAN QR | ${n} | ${b} | ${al} | ${num}`;
+document.getElementById('qrImg').src='https://api.qrserver.com/v1/create-qr-code/?size=220x220&data='+encodeURIComponent(data);
+document.getElementById('qrArea').style.display='block';
+}
+
+function updateLanguage(){
+const l=labels[document.getElementById('lang').value];
+l_name.textContent=l.name;
+l_age.textContent=l.age;
+l_blood.textContent=l.blood;
+l_allergy.textContent=l.allergy;
+l_condition.textContent=l.condition;
+l_contact.textContent=l.contact;
+l_address.textContent=l.address;
+}
+
+function callContact(){
+if(contactNumber) window.location.href='tel:'+contactNumber;
+}
+
+function findHospitals(){
+window.open('https://www.google.com/maps/search/hospitals+near+me','_blank');
+}
+</script>
+</body>
+</html>
