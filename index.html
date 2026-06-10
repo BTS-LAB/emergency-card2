@@ -101,7 +101,19 @@ v_address.textContent=ad;
 
 document.getElementById('emergency').style.display='block';
 
-const data=`MEDISCAN QR | ${n} | ${b} | ${al} | ${num}`;
+const data=`🚑 MEDISCAN QR
+
+Name: ${n}
+Age: ${a}
+Blood Group: ${b}
+Allergies: ${al}
+Medical Conditions: ${c}
+Medications: ${document.getElementById('meds').value}
+Emergency Contact Name: ${cn}
+Emergency Contact Number: ${num}
+Address: ${ad}
+
+AMBULANCE: 108`;
 document.getElementById('qrImg').src='https://api.qrserver.com/v1/create-qr-code/?size=220x220&data='+encodeURIComponent(data);
 document.getElementById('qrArea').style.display='block';
 }
